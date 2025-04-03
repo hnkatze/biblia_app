@@ -9,17 +9,20 @@ final verseServiceProvider = Provider<VerseService>((ref) {
   return VerseService(repositoryVersosImpl: repository);
 });
 
-
-final getSomesBookFutureProvider =
-    FutureProvider<List<Libro>>((ref) async {
+final getSomesBookFutureProvider = FutureProvider<Biblia>((ref) async {
   final verseService = ref.read(verseServiceProvider);
   return await verseService.getSomesBooks();
 });
 
-final getRamdomVerseFutureProvider =
-    FutureProvider<String>((ref) async {
+final getRamdomVerseFutureProvider = FutureProvider<String>((ref) async {
   final verseService = ref.read(verseServiceProvider);
   return await verseService.getRamdomVerse();
+});
+
+final getOneBookFutureProvider =
+    FutureProvider.family<Libro, int>((ref, bookNumber) async {
+  final verseService = ref.read(verseServiceProvider);
+  return await verseService.getOneBook(bookNumber);
 });
 
 class VerseService {
@@ -27,11 +30,15 @@ class VerseService {
 
   VerseService({required this.repositoryVersosImpl});
 
-Future<List<Libro>> getSomesBooks() async {
+  Future<Biblia> getSomesBooks() async {
     return await repositoryVersosImpl.getSomesBooks();
   }
 
   Future<String> getRamdomVerse() async {
     return await repositoryVersosImpl.getRamdomVerse();
+  }
+
+  Future<Libro> getOneBook(int bookNumber) async {
+    return await repositoryVersosImpl.getOneBook(bookNumber);
   }
 }

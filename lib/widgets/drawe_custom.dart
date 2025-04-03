@@ -29,18 +29,17 @@ class CustomDrawer extends ConsumerWidget {
             data: (books) => ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: books.length,
+              itemCount: books.libros.length,
               itemBuilder: (context, index) {
-                final book = books[index];
+                final book = books.libros[index];
                 return ListTile(
-                  title: Text('${book.numero}. ${book.nombre}'),
+                  title: Text('${book.book}. ${book.bookName}'),
                   onTap: () {
                     Navigator.pushNamed(
                       context,
                       '/book',
                       arguments: {
-                        'bookNumber': book.numero,
-                        'bookName': book.nombre,
+                        'book': book,
                       },
                     );
                   },

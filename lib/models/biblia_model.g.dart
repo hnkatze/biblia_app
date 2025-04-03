@@ -6,38 +6,48 @@ part of 'biblia_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+Biblia _$BibliaFromJson(Map<String, dynamic> json) => Biblia(
+      libros: (json['libros'] as List<dynamic>)
+          .map((e) => Libro.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$BibliaToJson(Biblia instance) => <String, dynamic>{
+      'libros': instance.libros,
+    };
+
 Libro _$LibroFromJson(Map<String, dynamic> json) => Libro(
-      nombre: json['nombre'] as String,
-      numero: (json['numero'] as num).toInt(),
-      capitulos: (json['capitulos'] as List<dynamic>)
-          .map((e) => Capitulo.fromJson(e as Map<String, dynamic>))
+      bookName: json['bookName'] as String,
+      book: (json['book'] as num).toInt(),
+      chapters: (json['chapters'] as List<dynamic>)
+          .map((e) => Chapter.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$LibroToJson(Libro instance) => <String, dynamic>{
-      'nombre': instance.nombre,
-      'numero': instance.numero,
-      'capitulos': instance.capitulos,
+      'bookName': instance.bookName,
+      'book': instance.book,
+      'chapters': instance.chapters,
     };
 
-Capitulo _$CapituloFromJson(Map<String, dynamic> json) => Capitulo(
-      capitulo: (json['capitulo'] as num).toInt(),
-      versiculos: (json['versiculos'] as List<dynamic>)
-          .map((e) => Versiculo.fromJson(e as Map<String, dynamic>))
+Chapter _$ChapterFromJson(Map<String, dynamic> json) => Chapter(
+      chapter: (json['chapter'] as num).toInt(),
+      verses: (json['verses'] as List<dynamic>)
+          .map((e) => Verse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$CapituloToJson(Capitulo instance) => <String, dynamic>{
-      'capitulo': instance.capitulo,
-      'versiculos': instance.versiculos,
+Map<String, dynamic> _$ChapterToJson(Chapter instance) => <String, dynamic>{
+      'chapter': instance.chapter,
+      'verses': instance.verses,
     };
 
-Versiculo _$VersiculoFromJson(Map<String, dynamic> json) => Versiculo(
-      versiculo: (json['versiculo'] as num).toInt(),
-      texto: json['texto'] as String,
+Verse _$VerseFromJson(Map<String, dynamic> json) => Verse(
+      verse: (json['verse'] as num).toInt(),
+      text: json['text'] as String,
     );
 
-Map<String, dynamic> _$VersiculoToJson(Versiculo instance) => <String, dynamic>{
-      'versiculo': instance.versiculo,
-      'texto': instance.texto,
+Map<String, dynamic> _$VerseToJson(Verse instance) => <String, dynamic>{
+      'verse': instance.verse,
+      'text': instance.text,
     };

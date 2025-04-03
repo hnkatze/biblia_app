@@ -2,7 +2,6 @@ import 'package:biblia_meno/data/verse_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class VerseToDay extends ConsumerStatefulWidget {
   const VerseToDay({super.key});
 
@@ -27,6 +26,7 @@ class _VerseToDayState extends ConsumerState<VerseToDay> {
       child: verseState.when(
         loading: () => const CircularProgressIndicator(),
         error: (error, stack) => const Text('Error al cargar el versículo.'),
+        // ignore: unnecessary_null_comparison
         data: (verse) => verse == null
             ? const Text('No se encontró un versículo.')
             : Padding(
