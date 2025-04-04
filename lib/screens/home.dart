@@ -34,17 +34,17 @@ class _HomeState extends ConsumerState<Home> {
           },
         ),
         title: const Text('Biblia Menonita'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: VerseSearchDelegate(ref.read as List<Verse>),
-              );
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.search),
+        //     onPressed: () {
+        //       // showSearch(
+        //       //   context: context,
+        //       //   delegate: VerseSearchDelegate(ref.read ),
+        //       // );
+        //     },
+        //   ),
+        // ],
       ),
       drawer: const CustomDrawer(),
       body: const Column(
