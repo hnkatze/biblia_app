@@ -1,4 +1,5 @@
 import 'package:biblia_meno/models/biblia_model.dart';
+import 'package:biblia_meno/providers/biblia_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,51 +8,77 @@ class BookPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    final Libro book = arguments['book'];
+    final Libro book = ref.watch(oneBookProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: AppBar(title: Text(book.bookName)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4, // Number of squares per row
-              crossAxisSpacing: 8.0, // Spacing between columns
-              mainAxisSpacing: 8.0, // Spacing between rows
-              childAspectRatio: 2.0, // Aspect ratio to make squares
-            ),
-            itemCount: book.chapters.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
+      appBar: AppBar(
+        title: Text(
+          '${book.bookName} (Capítulos)',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        surfaceTintColor: Colors.transparent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+            mainAxisSpacing: 8.0,
+            crossAxisSpacing: 8.0,
+            childAspectRatio: 1.0,
+          ),
+          itemCount: book.chapters.length,
+          itemBuilder: (context, index) {
+            final chapterNumber = index + 1;
+            final isSelected =
+                chapterNumber == ref.watch(currentChapterProvider);
+
+            return Material(
+              color: isSelected
+                  ? colorScheme.primaryContainer
+                  : colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12.0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12.0),
                 onTap: () {
-                  // Handle tap on chapter
+                  ref.read(currentChapterProvider.notifier).state =
+                      chapterNumber;
+                  Navigator.pushNamed(context, '/chapter');
                 },
+                overlayColor: WidgetStateProperty.all(
+                  colorScheme.onSurface.withAlpha((0.1 * 255).toInt()),
+                ),
                 child: Container(
-                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 1.0,
-                        offset: Offset(1, 1),
-                      ),
-                    ],
+                    border: isSelected
+                        ? Border.all(
+                            color: colorScheme.primary,
+                            width: 2.0,
+                          )
+                        : null,
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
-                  child: Text(
-                    '${index + 1}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                  child: Center(
+                    child: Text(
+                      '$chapterNumber',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w500,
+                        color: isSelected
+                            ? colorScheme.onPrimaryContainer
+                            : colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
