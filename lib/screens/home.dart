@@ -1,14 +1,26 @@
+import 'package:biblia_meno/models/biblia_model.dart';
 import 'package:biblia_meno/widgets/drawe_custom.dart';
+import 'package:biblia_meno/widgets/search_verse.dart';
+import 'package:biblia_meno/widgets/verse_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/verse_to_day.dart';
 
-class Home extends ConsumerWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
-  void intiState() {}
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<Home> createState() => _HomeState();
+}
+
+class _HomeState extends ConsumerState<Home> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -21,16 +33,25 @@ class Home extends ConsumerWidget {
             );
           },
         ),
-        title: const Text('Biblia'),
+        title: const Text('Biblia Menonita'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: VerseSearchDelegate(ref.read as List<Verse>),
+              );
+            },
+          ),
+        ],
       ),
       drawer: const CustomDrawer(),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            VerseToDay(),
-          ],
-        ),
+      body: const Column(
+        children: [
+          VerseToDay(),
+          Expanded(child: SearchVerse()),
+        ],
       ),
     );
   }
