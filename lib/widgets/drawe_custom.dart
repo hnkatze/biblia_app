@@ -10,7 +10,6 @@ class CustomDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bookNamesAsync = ref.watch(bibliaProvider);
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return bookNamesAsync.when(
       data: (bookNames) {
@@ -20,29 +19,62 @@ class CustomDrawer extends ConsumerWidget {
             bookNames.libros.where((book) => book.book > 39).toList();
 
         return Drawer(
-          surfaceTintColor: colorScheme.surface,
+          backgroundColor: colorScheme.surface,
+          surfaceTintColor: Colors.transparent,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(32),
+              bottomRight: Radius.circular(32),
+            ),
+          ),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
                 decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      colorScheme.primary,
+                      colorScheme.primary.withAlpha(230),
+                    ],
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(
-                      Icons.menu_book_rounded,
-                      size: 40,
-                      color: colorScheme.onPrimaryContainer,
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withAlpha(20),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.menu_book_rounded,
+                        size: 32,
+                        color: Colors.white,
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Libros de la Biblia',
-                      style: textTheme.titleLarge?.copyWith(
-                        color: colorScheme.onPrimaryContainer,
+                    const SizedBox(height: 16),
+                    const Text(
+                      'BIBLIOTECA',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Sagradas Escrituras',
+                      style: TextStyle(
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        fontFamily: 'Georgia',
                       ),
                     ),
                   ],
@@ -106,19 +138,40 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: colorScheme.primary.withAlpha(100),
+            width: 3,
+          ),
+        ),
+      ),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: colorScheme.primary),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: colorScheme.primary.withAlpha(15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 16,
+              color: colorScheme.primary,
+            ),
+          ),
           const SizedBox(width: 12),
           Text(
-            title.toUpperCase(),
+            title,
             style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: colorScheme.primary,
-              letterSpacing: 1.2,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.primary.withAlpha(200),
+              letterSpacing: 0.5,
             ),
           ),
         ],
@@ -140,40 +193,67 @@ class _BookTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-        leading: Container(
-          width: 32,
-          height: 32,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: colorScheme.primary.withAlpha((0.1 * 255).toInt()),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            '${book.book}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: colorScheme.primary,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colorScheme.primary.withAlpha(25),
+                        colorScheme.secondary.withAlpha(15),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: colorScheme.primary.withAlpha(40),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    '${book.book}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    book.bookName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: colorScheme.onSurface.withAlpha(100),
+                ),
+              ],
             ),
           ),
         ),
-        title: Text(
-          book.bookName,
-          style: TextStyle(
-            fontSize: 15,
-            color: colorScheme.onSurface,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        minLeadingWidth: 24,
-        dense: true,
-        visualDensity: const VisualDensity(vertical: -2),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        onTap: onTap,
       ),
     );
   }

@@ -1,12 +1,17 @@
+import 'package:biblia_meno/models/notifications_model.dart';
 import 'package:biblia_meno/pages/book_page.dart';
 import 'package:biblia_meno/pages/chapter_screen.dart';
 import 'package:biblia_meno/providers/biblia_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'screens/home.dart';
 
-void main() {
+void main() async {
   debugPrint("App inicializando...");
+  await Hive.initFlutter();
+  Hive.registerAdapter(NotificationModelAdapter());
+  await Hive.openBox<NotificationModel>('notifications');
   runApp(const ProviderScope(child: MainApp()));
 }
 
@@ -29,9 +34,84 @@ class MainApp extends ConsumerWidget {
         '/chapter': (context) => const ChapterScreen(),
       },
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1A3A52),
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: const Color(0xFF1A3A52),
+          secondary: const Color(0xFF8B7355),
+          tertiary: const Color(0xFF4A6FA5),
+          surface: const Color(0xFFFAFAFA),
+        ),
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
+          scrolledUnderElevation: 2,
+        ),
+        cardTheme: const CardThemeData(
+          elevation: 0,
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w600,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w600,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 16,
+            height: 1.6,
+          ),
+        ),
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1A3A52),
+          brightness: Brightness.dark,
+        ).copyWith(
+          primary: const Color(0xFF7FA3D1),
+          secondary: const Color(0xFFD4B896),
+          tertiary: const Color(0xFF8FAFD8),
+          surface: const Color(0xFF1E1E1E),
+        ),
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
+          scrolledUnderElevation: 2,
+        ),
+        cardTheme: const CardThemeData(
+          elevation: 0,
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w600,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w600,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 16,
+            height: 1.6,
+          ),
+        ),
+      ),
+      themeMode: ThemeMode.system,
     );
   }
 }

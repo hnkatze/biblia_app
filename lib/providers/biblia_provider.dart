@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:biblia_meno/data/repository_versos_impl.dart';
+import 'package:biblia_meno/models/notifications_model.dart';
 import 'package:biblia_meno/models/search_model.dart';
 import 'package:biblia_meno/models/verse_details.dart';
+import 'package:biblia_meno/utils/functions_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biblia_meno/models/biblia_model.dart';
 
@@ -40,6 +42,16 @@ final randomVerseProvider = StateProvider<VerseDetail>((ref) {
         data: (biblia) => biblia,
         orElse: () => Biblia(libros: []),
       );
+
+  final verseNotification = NotificationModel(
+    title: 'Notificación',
+    verse: '0',
+    body: 'Versículo del día: ',
+    dateTime: DateTime.now().add(const Duration(seconds: 30)),
+    isRead: false,
+  );
+
+  scheduleVerseNotification(verseNotification);
   return _generateRandomVerse(biblia);
 });
 
